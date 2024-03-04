@@ -1,0 +1,4 @@
+Babel==2.12.1
+matplotlib==3.6.1
+pandas==2.0.2
+streamlit==1.31.1
