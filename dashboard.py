@@ -12,11 +12,11 @@ def generate_seasonal_df(df_raw, index_season):
     return season_data
 
 def generate_monthly_in_season_df(df_season):
-    grouped_season_condition_month = df_season.groupby('month')[['cnt', 'hum', 'atemp', 'windspeed']]
+    grouped_season_condition_month = df_season.groupby('month').agg({'cnt': 'sum', 'hum': 'median', 'atemp': 'median', 'windspeed': 'median'})
     return grouped_season_condition_month
 
 def generate_weekly_in_season_df(df_season):
-    grouped_season_condition_week = df_season.groupby('week')[['cnt', 'hum', 'atemp', 'windspeed']]
+    grouped_season_condition_week = df_season.groupby('week').agg({'cnt': 'sum', 'hum': 'median', 'atemp': 'median', 'windspeed': 'median'})
     return grouped_season_condition_week
 
 def generate_seasonal_comparison_cnt(df_raw):
@@ -61,7 +61,7 @@ st.write('''Kita akan melihat kondisi cuaca saat peminjaman sepeda terbanyak dil
          dengan 3 variabel yaitu humidity (kelembapan), atemp (suhu terasa), dan windspeed (kecepatan angin).''')
 
 # get the median
-seasonal_df_median = seasonal_df.groupby('season')[['cnt', 'hum', 'atemp', 'windspeed']].median()
+seasonal_df_median = seasonal_df.groupby('season').agg({'cnt': 'sum', 'hum': 'median', 'atemp': 'median', 'windspeed': 'median'})
 grouped_season_condition = seasonal_df_median.sort_values(by='cnt', ascending=False)
 # bar plot with doubled bar side by side in x axis for cnt and hum,windspeed,atemp where hum windspeed and atemp is the secondary y, sort by highest cnt
 fig1, ax = plt.subplots()
@@ -80,9 +80,8 @@ st.pyplot(fig1)
 st.write('''Karena data cuaca berganti ganti, berikut merupakan data Bulanan dan Mingguan pada musim tersebut''')
 
 # weekly
-weekly_in_fall_median = weekly_in_fall.median()
 # Sort the grouped_week DataFrame by highest cnt
-weekly_in_fall_median = weekly_in_fall_median.sort_values(by='cnt', ascending=False)
+weekly_in_fall_median = weekly_in_fall.sort_values(by='cnt', ascending=False)
 
 
 # bar plot with doubled bar side by side in x axis for cnt and hum,windspeed,atemp where hum windspeed and atemp is the secondary y, sort by highest cnt
@@ -98,8 +97,7 @@ ax.set_ylabel('cnt')
 ax2.set_ylabel('hum, windspeed, atemp')
 plt.title('Peminjaman Sepeda pada musim gugur mingguan')
 
-monthly_in_fall_median = monthly_in_fall.median()
-monthly_in_fall_median = monthly_in_fall_median.sort_values(by='cnt', ascending=False)
+monthly_in_fall_median = monthly_in_fall.sort_values(by='cnt', ascending=False)
 
 
 # bar plot with doubled bar side by side in x axis for cnt and hum,windspeed,atemp where hum windspeed and atemp is the secondary y, sort by highest cnt
